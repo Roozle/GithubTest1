@@ -36,6 +36,11 @@ public class PlatformManager : MonoBehaviour
         }
     }
 
+    public Material[] materials;
+    public PhysicMaterial[] physicMaterials;
+
+    public Booster booster;
+
     private void Recycle()
     {
         Vector3 scale = new Vector3(
@@ -47,9 +52,14 @@ public class PlatformManager : MonoBehaviour
         position.x += scale.x * 0.5f;
         position.y += scale.y * 0.5f;
 
+        booster.SpawnIfAvailable(position);
+
         Transform o = objectQueue.Dequeue();
         o.localScale = scale;
         o.localPosition = position;
+        int materialIndex = Random.Range(0, materials.Length);
+        o.renderer.material = materials[materialIndex];
+        o.collider.material = physicMaterials[materialIndex];
         objectQueue.Enqueue(o);
 
         nextPosition += new Vector3(
