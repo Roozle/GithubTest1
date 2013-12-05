@@ -3,6 +3,7 @@ using System.Collections;
 
 public class runner : MonoBehaviour
 {
+    public static float distanceTraveled;
 
     // Use this for initialization
     void Start()
@@ -14,6 +15,7 @@ public class runner : MonoBehaviour
     void Update()
     {
         transform.Translate(5f * Time.deltaTime, 0f, 0f);
+        distanceTraveled = transform.localPosition.x;
 
     }
 }
