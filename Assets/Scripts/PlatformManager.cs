@@ -1,16 +1,18 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class skylineManager : MonoBehaviour {
-  
+public class PlatformManager : MonoBehaviour
+{
+
     public Transform prefab;
     public int numberOfObjects;
     public float recycleOffset;
     public Vector3 startPosition;
+    public Vector3 minSize, maxSize, minGap, maxGap;
+    public float minY, maxY;
 
     private Vector3 nextPosition;
     private Queue<Transform> objectQueue;
-
 
     void Start()
     {
@@ -26,8 +28,7 @@ public class skylineManager : MonoBehaviour {
         }
     }
 
-	// Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (objectQueue.Peek().localPosition.x + recycleOffset < runner.distanceTraveled)
         {
@@ -35,8 +36,7 @@ public class skylineManager : MonoBehaviour {
         }
     }
 
-    public Vector3 minSize, maxSize;
-    private void Recycle () 
+    private void Recycle()
     {
         Vector3 scale = new Vector3(
             Random.Range(minSize.x, maxSize.x),
@@ -47,11 +47,23 @@ public class skylineManager : MonoBehaviour {
         position.x += scale.x * 0.5f;
         position.y += scale.y * 0.5f;
 
-		Transform o = objectQueue.Dequeue();
+        Transform o = objectQueue.Dequeue();
         o.localScale = scale;
         o.localPosition = position;
-        nextPosition.x += scale.x;
-		objectQueue.Enqueue(o);
-	}
-}
+        objectQueue.Enqueue(o);
 
+        nextPosition += new Vector3(
+            Random.Range(minGap.x, maxGap.x) + scale.x,
+            Random.Range(minGap.y, maxGap.y),
+            Random.Range(minGap.z, maxGap.z));
+
+        if (nextPosition.y < minY)
+        {
+            nextPosition.y = minY + maxGap.y;
+        }
+        else if (nextPosition.y > maxY)
+        {
+            nextPosition.y = maxY - maxGap.y;
+        }
+    }
+}
