@@ -4,7 +4,7 @@ using System.Collections;
 
 public class GUIManager : MonoBehaviour {
 
-	public GUIText gameOverText, instructionsText, runnerText;
+    public GUIText boostsText, distanceText, gameOverText, instructionsText, runnerText;
     void Start()
     {
         GameEventManager.GameStart += GameStart;
